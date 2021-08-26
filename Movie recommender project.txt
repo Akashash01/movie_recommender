@@ -1,0 +1,60 @@
+Movie recommender - Python Project 
+(movie lens dataset)
+
+HINT : This is an content based filteration(movies)
+
+#IMPORT LIBRARIES:
+import pandas as pd
+import numpy as np
+
+#LOAD DATA:
+data = pd.read_csv("user data")             Column names[user_id,ratings,movie_id,timestamp]
+ash = pd.read_csv("movie data')             Column names[movie_name,movie_id]
+
+#MERGE DATA:
+ak = pd.merge(data,ash, on = "id",reset_index = true)
+
+Exploratory Data Analysis(EDA): getting info from data
+
+#VISUALIZATION LIBEARY:
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+ak.groupby('title')['ratings'].mean().sort_values(ascending = False)   - avg rating of each & every movie
+
+ak.groupby('title')['ratings'].count().sort_values(ascending = False)  - no.of ratings for each movie
+
+creatings dataframe for above sorted data
+
+ratings = pd.DataFrame(ak.groupby('title')['ratings'].mean()) 
+ratings['no of ratings'] = pd.DataFrame(ak.groupby('title')['ratings'].count()) - its shows title , rating, no of rating
+
+plt.figure(figure = (10,4))
+rating['no of ratings'].hist(bins = 60)
+
+plt.figure(figure = (10,4))
+rating['ratings'].hist(bins = 60)
+
+sns.joint(x= 'raings', y = 'no of rating', data = ratings)
+
+Model:
+
+movierecom = pd.pivot_table(index = 'user',column = 'title',values= 'ratings')
+
+ratings.sort_values('no of ratings',ascending = False)
+
+#TAKING ONE MOVIE AS REFERENCE:
+avenger_user_rating = movierecom['avengers']
+spiderman_user_rating = moviereocm['spiderman']   - both gives the user's rating for this movie
+
+#CO-RELATION FUNCTION:
+similar_to_avenger = movierecom.corrwith(avneger_user_rating) - correlation funtion
+
+corr_avenger = pd.DataFrame(similar_to_avnger,column = 'correlation')
+corr_avenger.dropna(inplace = True)
+
+corr_avenger.sort_values('correlation',ascending = False)
+
+corr_avenger = corr_avnger.join(ratings['no of ratings']) - it give title,correlation,no of ratings
+
+corr_avenger[corr_avenger['no of rating']>100].sort_values('correlation',ascending = False) - gives next highly recommended movie
